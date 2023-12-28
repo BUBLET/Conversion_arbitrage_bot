@@ -1,4 +1,4 @@
-[![GitHub contributors](https://img.shields.io/github/contributors/BUBLET/MovieRecomSystem.svg)](https://github.com/BUBLET/Conversion_arbitrage_bot/graphs/contributors)
+[![GitHub contributors](https://img.shields.io/github/contributors/BUBLET/Conversion_arbitrage_bot.svg)](https://github.com/BUBLET/Conversion_arbitrage_bot/graphs/contributors)
 ![Last commit](https://img.shields.io/github/last-commit/BUBLET/Conversion_arbitrage_bot.svg)
 ![Python version](https://img.shields.io/badge/Python-3.6-blue.svg)
 
