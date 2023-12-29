@@ -1,30 +1,18 @@
-import urllib3
-import sys
 
-def get_exchange(curr_from, curr_to, api_key):
-    # Формирование URL для получения курса обмена
-    url = 'https://www.exchangerate-api.com/{a}/{b}?k={key}'.format(a=curr_from, b=curr_to, key=api_key)
+from forex_python.converter import CurrencyRates
 
-    try:
-        http = urllib3.PoolManager()
-        response = http.request('GET', url)
-        rate = response.data.decode('utf-8').strip()
-        return rate
+c = CurrencyRates()
+currencies = ['USD', 'EUR', 'JPY', 'GBP', 'AUD', 'CAD', 'CHF', 'SEK', 'NZD', 'MXN', 'SGD', 'HKD', 'NOK', 'KRW', 'TRY', 'INR', 'BRL', 'ZAR', 'DKK', 'PLN', 'THB', 'MYR']
 
-    except Exception as e:
-        print("An error occurred:", str(e))
-        return None
+with open('currency_list.txt', 'w') as f:
+    # Записываем список валют в файл
+    f.write('\n'.join(currencies))
 
-def get_rate():
-    # Получение списка доступных валют из файла
-    currencies = []
-    with open("currency_codes.txt", 'r') as curr:
-        for line in curr:
-            codes = line.split('\t')
-            currencies.append(codes[2].strip('\n'))
+with open('graph_edges.txt', 'w') as f:
+    # Записываем курсы валют в файл
+    for base_currency in currencies:
+        for target_currency in currencies:
+            rate = c.get_rate(base_currency, target_currency)
+            f.write(f'{currencies.index(base_currency)} {currencies.index(target_currency)} {rate}\n')
 
-    return currencies
-
-# Получение списка доступных валют и вывод на экран
-currencies = get_rate()
-print(currencies)
+print('Файлы currency_list.txt и graph_edges.txt успешно заполнены.')

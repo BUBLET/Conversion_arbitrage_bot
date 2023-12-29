@@ -1,5 +1,5 @@
-import exchange_rates
 from math import log, exp
+
 
 def find_negative_cycle(graph, distance, predecessor, src, curr_list):
     tot = 1.0
@@ -23,9 +23,10 @@ def find_negative_cycle(graph, distance, predecessor, src, curr_list):
     if tot < 1.0:
         print("No Arbitrage opportunities")
 
+
 def bellman_ford(graph, edge_list, src, V):
-    distance = [float("inf") for x in range(V)]
-    predecessor = [-1 for x in range(V)]
+    distance = [float("inf") for _ in range(V)]
+    predecessor = [-1 for _ in range(V)]
 
     distance[src] = 0
 
@@ -36,7 +37,7 @@ def bellman_ford(graph, edge_list, src, V):
             if distance[u] + weight < distance[v]:
                 distance[v] = distance[u] + weight
                 predecessor[v] = u
-                
+
     # Проверка наличия отрицательного цикла
     for edge in edge_list:
         u, v, weight = edge
@@ -62,15 +63,20 @@ def create_graph(no_of_vertices):
                 graph[u][v] = -log(float(x[2].strip('\n')))
         return graph, edge_list
     except FileNotFoundError:
-        print("File 'graph_edges.txt' not found.")
+        print("Error: File 'graph_edges.txt' not found.")
         return None, None
     except ValueError:
-        print("Invalid data format in 'graph_edges.txt'.")
+        print("Error: Invalid data format in 'graph_edges.txt'.")
         return None, None
 
+
 def main():
-    curr_list = exchange_rates.get_rate()
-    if curr_list is None:
+    # Чтение списка валют из файла
+    try:
+        with open('currency_list.txt', 'r') as f:
+            curr_list = f.read().splitlines()
+    except FileNotFoundError:
+        print("Error: File 'currency_list.txt' not found.")
         return
 
     print(curr_list)
@@ -80,10 +86,11 @@ def main():
         return
 
     # Выполняем алгоритм для каждой валюты
-    for x in curr_list:
-        src = curr_list.index(x)
+    for currency in curr_list:
+        src = curr_list.index(currency)
         dist, pred = bellman_ford(graph, edge_list, src, no_of_vertices)
         find_negative_cycle(graph, dist, pred, src, curr_list)
+
 
 if __name__ == '__main__':
     main()
